@@ -11,7 +11,7 @@
  */
 
 metadata {
-    definition(name: "SwitchBot Bot - API", namespace: "toffehoff", author: "ToffeHoff") {
+    definition(name: "SwitchBot Bot - API", namespace: "toffehoff", author: "ToffeHoff", importUrl: "https://raw.githubusercontent.com/toffehoff/hubitat/main/Drivers/api-bot/switchBot-Bot.groovy") {
         capability "Switch"
         capability "Actuator"
     }
