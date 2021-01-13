@@ -43,32 +43,43 @@ def parse(String description) {
 
 def on() {
 
-    def postBody = '{ "command":"press" }'
-    if ( switchBotMode == "Switch" ) postBody = '{ "command":"turnOn" }'
+  if ( device.currentValue("switch") == "on" ) {
+    if (logEnable) log.debug "Getting on request - Switch already on - no action required"
+  } else {
 
-    if (logEnable) log.debug "Sending on POST request to device [${deviceId}] with message [${postBody}]"
+      def postBody = '{ "command":"press" }'
+      if ( switchBotMode == "Switch" ) postBody = '{ "command":"turnOn" }'
 
-    try {
-        httpPost([
-            uri: "https://api.switch-bot.com/v1.0/devices/${deviceId}/commands",
-            headers: [
-                "Content-type": "application/json; charset=utf8",
-                "Authorization": "${openToken}"
-            ],
-            body: postBody
-        ]) { resp ->
-            if (resp.success) {
-                sendEvent(name: "switch", value: "on", isStateChange: true)
-            }
-            if (logEnable)
-                if (resp.data) log.debug "${resp.data}"
-        }
-    } catch (Exception e) {
-        log.warn "Call to on failed: ${e.message}"
-    }
+      if (logEnable) log.debug "Sending on POST request to device [${deviceId}] with message [${postBody}]"
+
+      try {
+          httpPost([
+              uri: "https://api.switch-bot.com/v1.0/devices/${deviceId}/commands",
+              headers: [
+                  "Content-type": "application/json; charset=utf8",
+                  "Authorization": "${openToken}"
+              ],
+              body: postBody
+          ]) { resp ->
+              if (resp.success) {
+                  sendEvent(name: "switch", value: "on", isStateChange: true)
+              }
+              if (logEnable)
+                  if (resp.data) log.debug "${resp.data}"
+          }
+      } catch (Exception e) {
+          log.warn "Call to on failed: ${e.message}"
+      }
+  }
 }
 
 def off() {
+
+  if ( device.currentValue("switch") == "off" ) {
+
+    if (logEnable) log.debug "Getting off request - Switch already off - no action required"
+
+  } else {
 
     def postBody = '{ "command":"press" }'
     if ( switchBotMode == "Switch" ) postBody = '{ "command":"turnOff" }'
@@ -93,4 +104,5 @@ def off() {
     } catch (Exception e) {
         log.warn "Call to on failed: ${e.message}"
     }
+  }
 }
