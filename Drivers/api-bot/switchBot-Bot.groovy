@@ -14,6 +14,7 @@ metadata {
     definition(name: "SwitchBot Bot - API", namespace: "toffehoff", author: "ToffeHoff", importUrl: "https://raw.githubusercontent.com/toffehoff/hubitat/main/Drivers/api-bot/switchBot-Bot.groovy") {
         capability "Switch"
         capability "Actuator"
+        capability "Momentary"
     }
 }
 
@@ -39,6 +40,30 @@ def updated() {
 
 def parse(String description) {
     if (logEnable) log.debug(description)
+}
+
+def push() {
+
+  def postBody = '{ "command":"press" }'
+
+  if (logEnable) log.debug "Sending push POST request to device [${deviceId}] with message [${postBody}]"
+
+  try {
+      httpPost([
+          uri: "https://api.switch-bot.com/v1.0/devices/${deviceId}/commands",
+          headers: [
+              "Content-type": "application/json; charset=utf8",
+              "Authorization": "${openToken}"
+          ],
+          body: postBody
+      ]) { resp ->
+          if (logEnable)
+              if (resp.data) log.debug "${resp.data}"
+      }
+  } catch (Exception e) {
+      log.warn "Call to on failed: ${e.message}"
+  }
+
 }
 
 def on() {

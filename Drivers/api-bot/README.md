@@ -8,6 +8,11 @@ You will need an SwitchBotAPI Open Token and know the DeviceID of the bot you'd 
 
 The driver support Bots in Press and Switch mode
 
+## Commands
+* On - Will only send "press" or "turnOn" command to Bot when switch is in off-mode
+* Off - Will only send "press" or "turnOff" command to Bot when switch is in on-mode
+* Push - Will send "press" command to Bot and does NOT change the switch-state
+
 ## Getting an Open Token
 You need to have an account on SwitchBot.com and the SwitchBot app installed on your phone.
 * On your phone open the SwitchBot app
